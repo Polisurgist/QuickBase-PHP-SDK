@@ -28,6 +28,7 @@
 	var $qb_site = "www.quickbase.com";
 	var $qb_ssl = "https://www.quickbase.com/db/";
 	var $ticketHours = '';	
+	var $debug = false;
 
  /*---------------------------------------------------------------------
  //	Do Not Change
@@ -74,6 +75,10 @@
 		}
 
 	}
+	
+	public function debug($val=true){
+		$this->debug = $val;
+	}
 
 	public function set_xml_mode($bool) {
 		$this->xml = $bool;
@@ -102,7 +107,8 @@
 			);
 
 			$this->input = $input;
-
+			if($this->debug)
+				echo "INPUT:\n".$this->input."\n";
 			$ch = curl_init($url);
 			curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -113,6 +119,8 @@
 		}
 		else
 		{
+			if($this->debug)
+				echo "INPUT:\n".$input."\n";
 			$ch = curl_init($input);
 			curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -122,6 +130,9 @@
 		}
 
 		$r = curl_exec($ch);
+		
+		if($this->debug)
+				echo "OUTPUT:\n".$r."\n";
 
 		if($return_xml) {
 			$response = new SimpleXMLElement($r);
